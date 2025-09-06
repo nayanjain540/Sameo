@@ -11,7 +11,7 @@ SECRET_KEY = 'django-insecure-j-6_fw!rg497pydo$$zsa&e$gfnv76o5f0k0np034yz5ck4gme
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -94,7 +94,7 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'warranty_app', 'static'),
 ]
