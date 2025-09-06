@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Details - Sameo Warranty Admin</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .back-btn, .logout-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 8px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+        }
+
+        .back-btn:hover, .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .form-detail-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .card-header {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .card-header h2 {
+            color: #495057;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-header p {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .detail-section {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 6px;
+        }
+
+        .detail-section h3 {
+            color: #495057;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #dee2e6;
+            padding-bottom: 0.5rem;
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .detail-item:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: #495057;
+            min-width: 120px;
+        }
+
+        .detail-value {
+            color: #6c757d;
+            text-align: right;
+            flex: 1;
+            margin-left: 1rem;
+        }
+
+        .invoice-section {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: #e3f2fd;
+            border-radius: 6px;
+            border-left: 4px solid #2196f3;
+        }
+
+        .invoice-section h3 {
+            color: #1976d2;
+            margin-bottom: 1rem;
+        }
+
+        .invoice-link {
+            display: inline-block;
+            background: #2196f3;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+        }
+
+        .invoice-link:hover {
+            background: #1976d2;
+        }
+
+        .alert {
+            padding: 12px;
+            margin-bottom: 1rem;
+            border-radius: 6px;
+            font-weight: 500;
+        }
+
+        .alert-error {
+            background-color: #fee;
+            color: #c33;
+            border: 1px solid #fcc;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .detail-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header {
+                padding: 1rem;
+            }
+            
+            .detail-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .detail-value {
+                text-align: left;
+                margin-left: 0;
+                margin-top: 0.25rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Warranty Form Details</h1>
+        <div class="header-actions">
+            <a href="{% url 'admin_dashboard' %}" class="back-btn">← Back to Dashboard</a>
+            <a href="{% url 'admin_logout' %}" class="logout-btn">Logout</a>
+        </div>
+    </div>
+
+    <div class="container">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-error">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="form-detail-card">
+            <div class="card-header">
+                <h2>{{ form.name|default:"Unknown Customer" }}</h2>
+                <p>Form ID: {{ form.id }}</p>
+            </div>
+
+            <div class="card-body">
+                <div class="detail-grid">
+                    <div class="detail-section">
+                        <h3>Customer Information</h3>
+                        <div class="detail-item">
+                            <span class="detail-label">Name:</span>
+                            <span class="detail-value">{{ form.name|default:"-" }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Email:</span>
+                            <span class="detail-value">{{ form.email|default:"-" }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Phone:</span>
+                            <span class="detail-value">{{ form.phone|default:"-" }}</span>
+                        </div>
+                    </div>
+
+                    <div class="detail-section">
+                        <h3>Product Information</h3>
+                        <div class="detail-item">
+                            <span class="detail-label">Category:</span>
+                            <span class="detail-value">{{ form.category|default:"-" }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Video Type:</span>
+                            <span class="detail-value">{{ form.video_type|default:"-" }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Model:</span>
+                            <span class="detail-value">{{ form.model|default:"-" }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Serial Number:</span>
+                            <span class="detail-value">{{ form.serial_number|default:"-" }}</span>
+                        </div>
+                    </div>
+
+                    <div class="detail-section">
+                        <h3>Purchase Information</h3>
+                        <div class="detail-item">
+                            <span class="detail-label">Platform:</span>
+                            <span class="detail-value">{{ form.platform|default:"-" }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Shop Name:</span>
+                            <span class="detail-value">{{ form.shop_name|default:"-" }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Site Name:</span>
+                            <span class="detail-value">{{ form.site_name|default:"-" }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Date of Purchase:</span>
+                            <span class="detail-value">{{ form.date_of_purchase|default:"-" }}</span>
+                        </div>
+                    </div>
+
+                    <div class="detail-section">
+                        <h3>System Information</h3>
+                        <div class="detail-item">
+                            <span class="detail-label">Submitted:</span>
+                            <span class="detail-value">{{ form.timestamp|default:"-" }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                {% if form.invoice_url or form.invoice_filename %}
+                    <div class="invoice-section">
+                        <h3>Invoice Document</h3>
+                        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                            {% if form.invoice_url %}
+                                <a href="{{ form.invoice_url }}" target="_blank" class="invoice-link">View Invoice</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

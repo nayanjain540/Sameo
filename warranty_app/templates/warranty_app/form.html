@@ -1,0 +1,339 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Warranty Form</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      background-color: #121212;
+      font-family: 'Inter', sans-serif;
+      color: white;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      position: relative;
+    }
+
+    .admin-link {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: background-color 0.3s ease;
+    }
+
+    .admin-link:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .back-link {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: background-color 0.3s ease;
+    }
+
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .logo {
+      display: block;
+      margin: 0 auto 20px auto;
+      height: 60px;
+    }
+
+    h2 {
+      text-align: center;
+      font-weight: 600;
+      margin-bottom: 30px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    label {
+      font-weight: 500;
+      margin-bottom: 5px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="date"],
+    input[type="file"],
+    select {
+      padding: 12px;
+      border: none;
+      border-radius: 6px;
+      background-color: #1f1f1f;
+      color: white;
+      font-size: 1rem;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    button {
+      background-color: #ff4c4c;
+      color: white;
+      border: none;
+      padding: 14px;
+      font-size: 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #e94444;
+    }
+
+    #site-name-container,
+    #shop-name-container{
+      display: none;
+    }
+
+    .loader-overlay {
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(18, 18, 18, 0.9);
+      z-index: 10;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .loader {
+      border: 4px solid #2c2c2c;
+      border-top: 4px solid #ff4c4c;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px auto;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    #thank-you {
+      display: none;
+      text-align: center;
+      font-size: 1.2rem;
+      padding-top: 40px;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 20px 10px;
+      }
+
+      input, select, button {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="{% url 'category_selection' %}" class="back-link">← Back</a>
+    <img src="https://sameo.in/cdn/shop/t/2/assets/logo.png?v=59034085068800778071712058426" alt="Sameo Logo" class="logo">
+    <h2>Warranty Registration Form</h2>
+    <div style="text-align: center; margin-bottom: 20px; padding: 10px; background-color: #1f1f1f; border-radius: 6px;">
+      <strong>Selected Category: 
+        {% if category == 'VIDEO_GAME' %}Video Game
+        {% elif category == 'KIDS_CAMERA' %}Kids Camera
+        {% elif category == 'FITNESS_GAME' %}Fitness Game
+        {% endif %}
+      </strong>
+    </div>
+
+    <div class="loader-overlay" id="loader-overlay">
+      <div>
+        <div class="loader"></div>
+        <div>Submitting your request...</div>
+      </div>
+    </div>
+
+    <div id="thank-you">
+      ✅ Thank you for registering your product.<br>Redirecting to home...
+    </div>
+
+    <form id="warranty-form" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <input type="hidden" name="category" value="{{ category }}">
+
+      {% if category == 'VIDEO_GAME' %}
+        <label for="id_video_type">Video Game Type:</label>
+        <select name="video_type" id="id_video_type" onchange="onTypeChange()" required>
+          <option value="">Select Video Game Type</option>
+          <option value="HAND_VIDEO_GAME">Hand Video Game</option>
+          <option value="TV_VIDEO_GAME">TV Video Game</option>
+        </select>
+
+        <label for="id_model">Model:</label>
+        <select name="model" id="id_model" required>
+          <option value="">Select Model</option>
+        </select>
+
+      {% elif category == 'KIDS_CAMERA' %}
+        <label for="id_model">Model:</label>
+        <select name="model" id="id_model" required>
+          <option value="">Select Model</option>
+          <option value="SKC-P10">SKC-P10</option>
+          <option value="SKC-0030">SKC-0030</option>
+          <option value="SKC-Q5">SKC-Q5</option>
+        </select>
+
+      {% elif category == 'FITNESS_GAME' %}
+        <label for="id_model">Model:</label>
+        <select name="model" id="id_model" required>
+          <option value="">Select Model</option>
+          <option value="Gym Master">Gym Master</option>
+        </select>
+      {% endif %}
+
+      <label for="id_name">Name:</label>
+      <input type="text" name="name" id="id_name" required>
+
+      <label for="id_email">Email:</label>
+      <input type="email" name="email" id="id_email" required>
+
+      <label for="id_phone">Phone:</label>
+      <input type="text" name="phone" id="id_phone" required>
+
+      <label for="id_platform">Platform:</label>
+      <select name="platform" id="id_platform" onchange="onPlatformChange()" required>
+        <option value="">Select Platform</option>
+        <option value="Online">Online</option>
+        <option value="Offline">Offline</option>
+      </select>
+
+      <div id="site-name-container">
+        <label for="id_site_name">Site Name:</label>
+        <input type="text" name="site_name" id="id_site_name">
+      </div>
+
+      <div id="shop-name-container">
+        <label for="id_shop_name">Shop Name:</label>
+        <input type="text" name="shop_name" id="id_shop_name">
+      </div>
+
+      <div id="serial-number-container">
+        <label for="id_serial_number">Serial Number:</label>
+        <input type="text" name="serial_number" id="id_serial_number" required>
+      </div>
+
+      <label for="id_date">Date of Purchase:</label>
+      <input type="date" name="date_of_purchase" id="id_date" required>
+
+      <label for="id_invoice">Upload Invoice:</label>
+      <input type="file" name="invoice" id="id_invoice" required>
+
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+
+  <script>
+    function onTypeChange() {
+      const type = document.getElementById("id_video_type").value;
+      const modelSelect = document.getElementById("id_model");
+      let options = [];
+
+      if (type === "HAND_VIDEO_GAME") {
+        options = ["KidsGear", "DreamBoy", "GameGear", "Thunder NX", "Xtreme Pro", "SG9000"];
+      } else if (type === "TV_VIDEO_GAME") {
+        options = ["Little Master", "Micro Genius", "Ultrazone", "Ultrazone HD", "Micro Lite", "iPlay (without Gun)", "Micro Thunder", "iPlay Plus (with Gun)"];
+      }
+
+      // Clear existing options
+      modelSelect.innerHTML = "";
+      
+      // Add default option
+      const defaultOption = document.createElement("option");
+      defaultOption.value = "";
+      defaultOption.text = "Select Model";
+      modelSelect.appendChild(defaultOption);
+      
+      // Add model options
+      options.forEach(opt => {
+        const option = document.createElement("option");
+        option.value = opt;
+        option.text = opt;
+        modelSelect.appendChild(option);
+      });
+    }
+
+    function onPlatformChange() {
+      const platform = document.getElementById("id_platform").value;
+      const siteContainer = document.getElementById("site-name-container");
+      const shopContainer = document.getElementById("shop-name-container");
+      
+      if (platform === "Online") {
+        siteContainer.style.display = "block";
+        shopContainer.style.display = "none";
+        document.getElementById("id_shop_name").value = "";
+      } else if (platform === "Offline") {
+        siteContainer.style.display = "none";
+        shopContainer.style.display = "block";
+        document.getElementById("id_site_name").value = "";
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      // Only call onTypeChange if we're on a video game form
+      const videoTypeSelect = document.getElementById("id_video_type");
+      if (videoTypeSelect) {
+        // Don't call onTypeChange initially - let user select first
+      }
+      
+      onPlatformChange();
+
+      // Show loader on submit but allow default POST
+      document.getElementById("warranty-form").addEventListener("submit", function () {
+        document.getElementById("loader-overlay").style.display = "flex";
+      });
+    });
+  </script>
+
+  {% if submitted %}
+    <script>
+      document.getElementById("warranty-form").style.display = "none";
+      document.getElementById("loader-overlay").style.display = "none";
+      document.getElementById("thank-you").style.display = "block";
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 3000);
+    </script>
+  {% endif %}
+</body>
+</html>

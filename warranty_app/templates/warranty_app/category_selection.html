@@ -1,0 +1,122 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sameo Warranty Registration</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      background-color: #121212;
+      font-family: 'Inter', sans-serif;
+      color: white;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    .logo {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .logo img {
+      height: 60px;
+    }
+
+    .title {
+      text-align: center;
+      font-size: 2rem;
+      font-weight: 600;
+      margin-bottom: 40px;
+    }
+
+    .category-grid {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+
+    .category-card {
+      background-color: #1f1f1f;
+      border-radius: 12px;
+      width: 300px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      text-align: center;
+      text-decoration: none;
+      color: white;
+      overflow: hidden;
+      max-width: 320px;
+    }
+
+    .category-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 10px 25px rgba(255, 255, 255, 0.1);
+    }
+
+    .category-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .category-label {
+      padding: 15px;
+      font-size: 1.2rem;
+      font-weight: 500;
+      background-color: #272727;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 20px 10px;
+      }
+
+      .category-grid {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .category-card {
+        width: 100%;
+        max-width: 90%;
+      }
+
+      .category-card img {
+        height: 180px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo">
+      <img src="{% static 'warranty_app/images/sameo_logo.jpg' %}" alt="Sameo Logo">
+    </div>
+
+    <div class="title">Select Your Product Category</div>
+
+    <div class="category-grid">
+      <a href="/form/?category=VIDEO_GAME" class="category-card">
+        <img src="{% static 'warranty_app/images/video_game.jpg' %}" alt="Video Game">
+        <div class="category-label">Video Game</div>
+      </a>
+      <a href="/form/?category=KIDS_CAMERA" class="category-card">
+        <img src="{% static 'warranty_app/images/kids_camera.jpg' %}" alt="Kids Camera">
+        <div class="category-label">Kids Camera</div>
+      </a>
+      <a href="/form/?category=FITNESS_GAME" class="category-card">
+        <img src="{% static 'warranty_app/images/fitness_game.jpg' %}" alt="Fitness Game">
+        <div class="category-label">Fitness Game</div>
+      </a>
+    </div>
+  </div>
+</body>
+</html>
